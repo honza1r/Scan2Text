@@ -21,12 +21,13 @@ def buttonFuncOpenFile():
         insertToMessageBox("Žádný soubor nebyl vybrán")
         return None
 
+    be.printText(filepath)
     # Attempt to process the filepath
-    try:
-        """HERE GOES CODE FOR DOING SOMETHING WITH THE FILEPATH"""
-        be.printText(filepath)
-    except Exception as e:
-        insertToMessageBox(f"Chyba při nahrávání souboru: {e}")
+    # try:
+    #     """HERE GOES CODE FOR DOING SOMETHING WITH THE FILEPATH"""
+    #     be.printText(filepath)
+    # except Exception as e:
+    #     insertToMessageBox(f"Chyba při nahrávání souboru: {e}")
     
 
 def dropDownChange(event):

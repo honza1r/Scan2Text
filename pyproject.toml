@@ -7,5 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
     "easyocr>=1.7.2",
     "numpy>=2.4.2",
+    "pymupdf>=1.26.7",
     "ttkbootstrap>=1.20.1",
 ]
