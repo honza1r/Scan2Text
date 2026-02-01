@@ -32,7 +32,8 @@ def printText(filepath):
                 print(text)
 
 """Program variables"""
-
+sourceFilepath = ""
+languages = []
 
 """Code"""
 

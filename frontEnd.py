@@ -6,6 +6,7 @@ import ttkbootstrap as tb  # For modern themes
 import main as be
 import sys
 import os
+from pathlib import Path
 
 def buttonFuncOpenFile():
     # Open a file dialog to select a file
@@ -14,21 +15,48 @@ def buttonFuncOpenFile():
 
     filepath = filedialog.askopenfilename(
         title="Vyberte zdrojový soubor", # HERE GO INSTRUCTION FOR THE USER AS TO WHICH FILE THEY'RE SUPPOSED TO SELECT
-        filetypes=[("PNG", "*.png"),("JPEG", "*.jpeg"),("PDF", "*.pdf")] # HERE GO ALLOWED FILETYPES THAT CAN BE SELECTED
+        filetypes=[("PDF", "*.pdf"),("PNG", "*.png"),("JPEG", "*.jpeg")] # HERE GO ALLOWED FILETYPES THAT CAN BE SELECTED
     )
     
     if not filepath:
         insertToMessageBox("Žádný soubor nebyl vybrán")
         return None
 
-    be.printText(filepath)
-    # Attempt to process the filepath
-    # try:
-    #     """HERE GOES CODE FOR DOING SOMETHING WITH THE FILEPATH"""
-    #     be.printText(filepath)
-    # except Exception as e:
-    #     insertToMessageBox(f"Chyba při nahrávání souboru: {e}")
+    insertToMessageBox("Zdrojový Soubor: " + filepath)
+    be.sourceFilepath = filepath
     
+def buttonFuncCreateText():
+    # Open a file dialog to select a file
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+
+    folderpath = filedialog.askdirectory(
+        title="Vyberte cílovou složku"  # "Select the target folder"
+    )
+    
+    if not folderpath:
+        insertToMessageBox("Žádná složka nebyla vybrána")
+        return None
+    
+    folderpath += "/" + Path(be.sourceFilepath).stem + ".txt"
+    
+    be.languages = []
+    if checkboxEnglish_var:
+        be.languages.append('en')
+    if checkboxCzech_var:
+        be.languages.append('cs')
+    if checkboxHungarian_var:
+        be.languages.append('hu')
+    if checkboxItalian_var:
+        be.languages.append('it')
+    if checkboxUkranian_var:
+        be.languages.append('uk')
+    if checkboxRussian_var:
+        be.languages.append('ru')
+    
+    be.scanText(folderpath)
+    
+    insertToMessageBox("Text uložený do: " + folderpath)
 
 def dropDownChange(event):
     selection = dropDownExample.get()
@@ -66,28 +94,45 @@ window_y = root.winfo_height()  # get window size information
 x = window_x * 0.01 # these will function as reference for all UIX objects
 y = window_y * 0.05
 
-
 """Buttons"""
 buttonOpenFile = ttk.Button(root, text="Vybrat Scan", command=buttonFuncOpenFile, takefocus=True, width=22)
 buttonOpenFile.place(x=x, y=y)
 buttonOpenFile.config(state="enabled") 
 
-"""Drop-down Menus"""
-dropDownExample = ttk.Combobox(root, width=21, state='enabled')
-dropDownExample['values'] = ["Option 1", "Option 2", "Option 3"]
-dropDownExample.bind("<<ComboboxSelected>>", dropDownChange) # Function that gets called whenever theres a new selection made
-dropDownExample.place(x=x+1, y=y+40)
+buttonScanToText = ttk.Button(root, text="Vytvořit Přepis", command=buttonFuncCreateText, takefocus=True, width=22)
+buttonScanToText.place(x=x, y=y+40)
+buttonScanToText.config(state="enabled") 
 
 """Checkboxes"""
-checkboxExample = tk.IntVar(value=1)  
-checkboxExample = ttk.Checkbutton(root, text="Example Checkbox", variable=checkboxExample) 
-checkboxExample.place(x=x+485, y=y)
+checkboxEnglish_var = tk.IntVar(value=0)  
+checkboxEnglish = ttk.Checkbutton(root, text="Angličtina", variable=checkboxEnglish_var) 
+checkboxEnglish.place(x=x+175, y=y)
+
+checkboxCzech_var = tk.IntVar(value=0)  
+checkboxCzech = ttk.Checkbutton(root, text="Čeština", variable=checkboxCzech_var) 
+checkboxCzech.place(x=x+175, y=y+19)
+
+checkboxHungarian_var = tk.IntVar(value=0)  
+checkboxHungarian = ttk.Checkbutton(root, text="Maďarština", variable=checkboxHungarian_var) 
+checkboxHungarian.place(x=x+175, y=y+38)
+
+checkboxItalian_var = tk.IntVar(value=0)  
+checkboxItalian = ttk.Checkbutton(root, text="Italština", variable=checkboxItalian_var) 
+checkboxItalian.place(x=x+175, y=y+57)
+
+checkboxUkranian_var = tk.IntVar(value=0)  
+checkboxUkranian = ttk.Checkbutton(root, text="Ukrajinština", variable=checkboxUkranian_var) 
+checkboxUkranian.place(x=x+260, y=y)
+
+checkboxRussian_var = tk.IntVar(value=0)  
+checkboxRussian = ttk.Checkbutton(root, text="Ruština", variable=checkboxRussian_var) 
+checkboxRussian.place(x=x+260, y=y+19)
 
 """Message Box"""
 messageBox = tk.Text(root, height=8, width=72, wrap="none", state=tk.NORMAL, takefocus=False, font = ("Arial", 12, "bold")) #Whenever text need be changed the window first needs be enabled and disabled again (to prevent user interaction)
 messageBox.place(x=x, y=y+80)
 messageBox.config(state=tk.DISABLED) #message box needs to be disabled to prevent user input!!!
-insertToMessageBox("Vyberte scan na přepsání\n") # PLACE INITIAL INSTRUCTION FOR THE USER
+insertToMessageBox("Vyberte scan na přepsání") # PLACE INITIAL INSTRUCTION FOR THE USER
 # Add scrollbars to the Text widget
 scrollbarY = ttk.Scrollbar(root, command=messageBox.yview)
 scrollbarY.place(x=x + 659, y=y+80, height = 177) 
