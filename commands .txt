@@ -1,0 +1,25 @@
+// Setup a brand new project 
+powershell -ExecutionPolicy Bypass -File ".\setup.ps1"
+
+// Synchronize pulled project from git repo
+uv sync
+
+// Change python version used
+Edit the "requires-python = " line in pyproject.toml to whatever version you desire 
+uv python pin 3.x.x // Type in the desired version
+uv sync
+
+// Change or odd library
+uv add <pkg> // Thuvis just adds the latest version, unless a specified version is already used in the project
+uv add <pkg>==x.x.x // This intalls a specific library version
+
+// Remove library
+uv remove <pkg>
+
+// Update UV if manual changes in pyproject.toml or uv.lock were made
+uv lock
+
+// Create .exe from this python script
+uv add pyinstaller
+PyInstaller --onefile --windowed --name Test --icon Resources\soma_icon.ico --add-data "Resources\soma_icon.ico;Resources" frontEnd.py
+                                   name of app        location of icon (leave as is)      current path of image    path within app (leave as is)
