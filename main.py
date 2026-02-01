@@ -15,18 +15,20 @@ import easyocr
 """Functions"""
 def scanText(filepath):
     reader = easyocr.Reader(languages)
-    if sourceFilepath.split('.')[-1].lower() == "pdf":
-        print("im here")
-        pages = fitz.open(filepath)
-        print("pdf laoded")
-        for page in pages:
-            result = reader.readtext(np.array(page.get_pixmap(dpi=300).pil_image()))
-            for bbox, text, confidence in result:
-                if confidence > 0.5:
-                    print(text)
-    else:
-        result = reader.readtext(sourceFilepath)
-        with open(filepath, 'w', encoding='utf-8') as f:
+    with open(filepath, 'w', encoding='utf-8') as f:
+        if sourceFilepath.split('.')[-1].lower() == "pdf":
+            pages = fitz.open(sourceFilepath)
+            progress = 0
+            for page in pages:
+                img = np.array(page.get_pixmap(dpi=300, colorspace=fitz.csGRAY).pil_image())
+                result = reader.readtext(img)
+                for bbox, text, confidence in result:
+                    if confidence > 0.5:
+                        f.write(text+"\n")
+                progress += 1
+                print(progress/len(pages))
+        else:
+            result = reader.readtext(sourceFilepath)
             for bbox, text, confidence in result:
                 if confidence > 0.5:
                     f.write(text+"\n")
