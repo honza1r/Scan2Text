@@ -41,19 +41,19 @@ def buttonFuncCreateText():
     folderpath += "/" + Path(be.sourceFilepath).stem + ".txt"
     
     be.languages = []
-    if checkboxEnglish_var:
+    if checkboxEnglish_var.get() == 1:
         be.languages.append('en')
-    if checkboxCzech_var:
+    if checkboxCzech_var.get() == 1:
         be.languages.append('cs')
-    if checkboxHungarian_var:
+    if checkboxHungarian_var.get() == 1:
         be.languages.append('hu')
-    if checkboxItalian_var:
+    if checkboxItalian_var.get() == 1:
         be.languages.append('it')
-    if checkboxUkranian_var:
+    if checkboxUkranian_var.get() == 1:
         be.languages.append('uk')
-    if checkboxRussian_var:
+    if checkboxRussian_var.get() == 1:
         be.languages.append('ru')
-    
+    print(be.languages)
     be.scanText(folderpath)
     
     insertToMessageBox("Text uložený do: " + folderpath)

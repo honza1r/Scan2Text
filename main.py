@@ -13,10 +13,9 @@ import easyocr
 
 
 """Functions"""
-def printText(filepath):
-    reader = easyocr.Reader(['en', 'hu'])
-    
-    if filepath.split('.')[-1].lower() == "pdf":
+def scanText(filepath):
+    reader = easyocr.Reader(languages)
+    if sourceFilepath.split('.')[-1].lower() == "pdf":
         print("im here")
         pages = fitz.open(filepath)
         print("pdf laoded")
@@ -26,10 +25,11 @@ def printText(filepath):
                 if confidence > 0.5:
                     print(text)
     else:
-        result = reader.readtext(filepath)
-        for bbox, text, confidence in result:
-            if confidence > 0.5:
-                print(text)
+        result = reader.readtext(sourceFilepath)
+        with open(filepath, 'w', encoding='utf-8') as f:
+            for bbox, text, confidence in result:
+                if confidence > 0.5:
+                    f.write(text+"\n")
 
 """Program variables"""
 sourceFilepath = ""
